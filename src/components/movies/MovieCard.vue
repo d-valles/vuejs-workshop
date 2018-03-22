@@ -15,9 +15,13 @@
 
       <movie-card-vote-average :voteAverage="voteAverage"/>
 
-      <a v-if="!saved" href="#" @click.prevent="saveMovie(movieObject)"
+      <router-link :to="getRoute"
         class="btn btn-primary save-btn">
-        Add to backlog
+        More
+      </router-link>
+      <a v-if="!saved" href="#" @click.prevent="saveMovie(movieObject)"
+        class="btn btn-info save-btn">
+        Add
       </a>
       <a v-else href="#" @click.prevent="removeSavedMovie(movieObject)"
         class="btn btn-danger save-btn">
@@ -86,6 +90,9 @@ export default {
         'image': this.image,
       }
     },
+    getRoute() {
+      return `/movies/${this.id}`
+    }
   },
 
   methods: {
