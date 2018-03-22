@@ -11,10 +11,12 @@
 
       <movie-filter/>
 
-      <div class="row movie-container">
+      <div class="row movie-container" :class="{'loading': loading}">
 
-        <div class="col-xs-12 col-sm-6 col-lg-3">
-          <movie-card :id="1"/>
+        <div v-for="movie in movies"
+          :key="movie.index"
+          class="col-xs-12 col-sm-6 col-lg-3">
+          <movie-card v-bind="movie" />
         </div>
 
       </div>
@@ -37,6 +39,20 @@ export default {
     MovieNav,
     Pagination,
     MovieFilter
+  },
+  computed: {
+    message() {
+      return this.$store.state.hello
+    },
+    movies() {
+      return this.$store.getters.movieCards
+    },
+    loading() {
+      return this.$store.state.loading
+    }
+  },
+  mounted() {
+    this.$store.dispatch('fetchMovies')
   }
 }
 </script>
