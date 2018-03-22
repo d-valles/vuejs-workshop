@@ -26,5 +26,9 @@ export default {
     let query = '/genre/movie/list'
     const request = `${url}${query}?api_key=${key}`
     return axios.get(request)
+  },
+
+  getMovieById(queryId) {
+    return axios.get(`${url}/movie/${queryId}?api_key=${key}`)
   }
 }
