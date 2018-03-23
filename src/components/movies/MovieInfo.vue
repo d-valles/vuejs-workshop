@@ -7,17 +7,17 @@
         </div>
 
         <div class="container">
-            <div class="card">
+            <div class="card"  style="width: 80%;">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                 <div class="card-block">
                     <h4 class="card-title">{{title}}</h4>
                     <p class="card-text">{{description}}</p>
                     <p class="card-text">{{rate}}</p>
                 </div>
                 </div>
-                <div class="col-md-6">
-                    <img :src="image">
+                <div class="col-md-4 float-left">
+                    <img :src="image" class="float-left">
                 </div>
             </div>
             </div>

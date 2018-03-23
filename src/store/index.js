@@ -9,17 +9,20 @@ const store = {
     state: {
         hello: 'world',
         movies: [],
+        savedMovies: [],
         genres: [],
         selectedGenre: null,
         loading: false,
-        movie: {}
+        movie: {},
+        currentPage: 1,
+        totalPages: 0
     },
 
     actions: {
-        async fetchMovies(context) {
+        async fetchMovies(context, page=1) {
             context.commit('setLoading', true)
             const moviesData = await MovieService.getMovies({
-                page: 1,
+                page,
                 genre: context.state.selectedGenre
             });
             context.commit('setMovies', moviesData.data)
@@ -37,10 +40,35 @@ const store = {
             context.commit('setGenre', genreId)
             context.dispatch('fetchMovies')
         },
+        async fetchPage(context, page) {
+            context.dispatch('fetchMovies', page)           
+        },
+        saveMovie (context, movie) {
+            context.commit('saveMovie', movie)
+            context.commit('persistSavedMovies')
+          },
+          removeMovie (context, movie) {
+            context.commit('removeMovie', movie)
+            context.commit('persistSavedMovies')
+          },
+          fetchSavedMovies (context) {
+            const savedMoviesJson = localStorage.getItem('savedMovies')
+            let savedMovies = []
+            try {
+              console.log(savedMoviesJson)
+              savedMovies = JSON.parse(savedMoviesJson)
+              console.log(savedMovies)
+            } catch (error) {
+              console.log(error)
+            }
+            context.commit('setSavedMovies', savedMovies || [])
+          }
     },
 
     mutations: {
         setMovies(state, moviesData) {
+            state.currentPage = moviesData.page
+            state.totalPages = moviesData.total_pages
             state.movies = moviesData.results
         },
         setGenres (state, genreData) {
@@ -54,7 +82,21 @@ const store = {
         },
         setMovie(state, movieData) {
             state.movie = movieData
-        }
+        },
+        saveMovie (state, movie) {
+            state.savedMovies.push(movie)
+          },
+          removeMovie (state, removedMovie) {
+            state.savedMovies = state.savedMovies
+            .filter(movie => movie.id !== removedMovie.id)           
+          },
+          persistSavedMovies (state) {
+            localStorage.setItem('savedMovies',
+              JSON.stringify(state.savedMovies))
+          },
+          setSavedMovies (state, savedMovies) {
+            state.savedMovies = savedMovies
+          }
     },
 
     getters: {

@@ -10,6 +10,7 @@ Vue.use(VueRouter)
 const routes = [
     { path: '/', component: TodoPage },
     { path: '/movies', component: MoviePage },
+    { path: '/movies/backlog', component: MoviePage },
     { path: '/movies/:id', component: MovieInfo }
 ]
 

@@ -23,7 +23,7 @@
         class="btn btn-info save-btn">
         Add
       </a>
-      <a v-else href="#" @click.prevent="removeSavedMovie(movieObject)"
+      <a v-else href="#" @click.prevent="removeMovie(movieObject)"
         class="btn btn-danger save-btn">
         Remove
       </a>
@@ -34,6 +34,7 @@
 
 <script>
 import MovieCardVoteAverage from './MovieCardVoteAverage'
+import {mapActions} from 'vuex'
 
 export default {
   components: {
@@ -78,8 +79,8 @@ export default {
       return this.image
     },
     saved () {
-      // TODO check if movie is saved
-      return false
+      const savedMovies = this.$store.state.savedMovies
+      return savedMovies.some(movie => movie.id === this.id)
     },
     movieObject () {
       // We don't save vote_average because it may change
@@ -96,12 +97,10 @@ export default {
   },
 
   methods: {
-    saveMovie () {
-      // TODO add movie to saved
-    },
-    removeSavedMovie (movieObject) {
-      // TODO remove saved movie
-    }
+    ...mapActions({
+      saveMovie: 'saveMovie',
+      removeMovie: 'removeMovie'
+    })
   }
 }
 </script>
